@@ -60,13 +60,31 @@ class Player
     extract_stat(stats, :rbi)
   end
 
+  def self.get_player_name(player_id)
 
+    player = names_hash[player_id]
 
+    "#{player[:namefirst]} #{player[:namelast]}"
+  end
 
   private
 
   def extract_stat(stats, stat_name)
     stats.inject(0) { |sum, stat| sum + stat.send(stat_name) }
+  end
+
+  def self.names_hash
+    @memoized_names_hash ||= load_names_hash
+  end
+
+  def self.load_names_hash
+    players = {}
+
+    CSV.foreach("./data/Master-small.csv", :headers => true, :header_converters => :symbol, :converters => :all) do |row|
+      players[row.fields[0]] = Hash[row.headers[1..-1].zip(row.fields[1..-1])]
+    end
+
+    players
   end
 
 end

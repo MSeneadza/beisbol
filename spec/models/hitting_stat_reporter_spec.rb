@@ -162,7 +162,8 @@ describe HittingStatsReporter do
 
   it 'should report Triple Crown Winners' do
     reporter = HittingStatsReporter.new
-    reporter.load_stats('Test-Batting.csv')
+    #reporter.load_stats('Test-Batting.csv')
+    reporter.load_stats('Batting-07-12.csv')
 
     reporter.report_triple_crown_winners(2012)
     expect(true).to be_falsey

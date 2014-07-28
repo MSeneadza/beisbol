@@ -108,5 +108,12 @@ describe Player do
     #should return zero
   end
 
+  it 'should find player names in the csv player file given a player_id' do
+    name = 'ariasal02'
+    player_name = Player.get_player_name(name)
+    expect(player_name).to eq('Alberto Arias')
+
+  end
+
 
 end
