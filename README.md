@@ -2,6 +2,14 @@
 
 This is my (Michael Seneadza - GitHub ID: MSeneadza) submission for the baseball stats coding challenge.
 
+### Requirements: ###
+
+When the application is run, use the provided data and calculate the following results and write them to STDOUT.
+
+1) Most improved batting average( hits / at-bats) from 2009 to 2010.  Only include players with at least 200 at-bats.
+2) Slugging percentage for all players on the Oakland A's (teamID = OAK) in 2007. 
+3) Who was the AL and NL triple crown winner for 2011 and 2012.  If no one won the crown, output "(No winner)"
+
 ### Installation / Setup ###
 
 * This was written on Ruby 2.1.2 and the Gemfile specifies / requires that version. If you need to run on a different version
