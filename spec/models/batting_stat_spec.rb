@@ -9,13 +9,6 @@ describe BattingStat do
     expect(build(:batting_stat)).to be_valid
   end
 
-  # it 'assigns a player when created' do
-  #   stat1 = BattingStat.new({player_id: 'Player1', year: 2007, hits: 30, at_bats: 130, rbi: 25})
-  #   p = stat1.player
-  #
-  #   expect(p.player_id).to eq('Player1')
-  # end
-
   it 'registers itself with the player' do
     player = Player.new({player_id: 'Player1'})
     stat1 = BattingStat.new({player_id: 'Player1', year: 2007, hits: 30, at_bats: 130, rbi: 25})

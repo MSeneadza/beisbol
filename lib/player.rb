@@ -18,6 +18,7 @@ class Player
     stats = stats_for_year(the_year)
     hits = extract_stat(stats, :hits)
     at_bats = extract_stat(stats, :at_bats)
+    return 0 if at_bats == 0
     hits.to_f / at_bats.to_f
   end
 

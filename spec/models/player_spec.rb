@@ -92,9 +92,24 @@ describe Player do
     expect(p.slugging_percentage(2007)).to eq(the_answer)
   end
 
-  it 'does not divide by zero' do
+  it 'does not divide by zero when computing slugging percentage' do
     #pass in at_bats = 0
     #should return zero
+    p = Player.new
+    stat = BattingStat.new({year: 2007, hits: 20, at_bats: 0, rbi: 25, doubles: 10, triples: 5, home_runs: 14})
+    p.add_batting_stat(stat)
+
+    expect(p.slugging_percentage(2007)).to eq(0)
+  end
+
+  it 'does not divide by zero when computing batting average' do
+    #pass in at_bats = 0
+    #should return zero
+    p = Player.new
+    stat = BattingStat.new({year: 2007, hits: 20, at_bats: 0, rbi: 25, doubles: 10, triples: 5, home_runs: 14})
+    p.add_batting_stat(stat)
+
+    expect(p.batting_average(2007)).to eq(0)
   end
 
   it 'should find player names in the csv player file given a player_id' do

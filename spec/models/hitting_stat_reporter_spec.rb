@@ -84,7 +84,6 @@ describe HittingStatsReporter do
     reporter = HittingStatsReporter.new
     reporter.load_stats('Test-Batting.csv')
 
-    #TODO: check / fix -- getting errors for 2012 -- bad data?
     filtered_list = reporter.filter_by_at_bats(reporter.players, HittingStatsReporter::TRIPLE_CROWN_AB_THRESHOLD, 2011)
     sorted_list = reporter.sort_players_by_bat_avg(filtered_list, 2011)
     expect(sorted_list.first.player_id).to eq('avilaal01')
@@ -94,7 +93,6 @@ describe HittingStatsReporter do
     reporter = HittingStatsReporter.new
     reporter.load_stats('Test-Batting.csv')
 
-    #TODO: check / fix -- getting errors for 2012 -- bad data?
     filtered_list = reporter.filter_by_at_bats(reporter.players, HittingStatsReporter::TRIPLE_CROWN_AB_THRESHOLD, 2011)
     sorted_list = reporter.sort_players_by_home_runs(filtered_list, 2011)
     expect(sorted_list.first.player_id).to eq('arencjp01')
