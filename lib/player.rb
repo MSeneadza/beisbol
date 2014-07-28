@@ -3,11 +3,6 @@ require 'csv'
 
 class Player
 
-
-  #has_many :batting_stats
-
-  #validates_presence_of :player_id
-
   attr_accessor :player_id, :batting_stats
 
   def initialize(atts = {})

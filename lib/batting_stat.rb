@@ -20,12 +20,10 @@ class BattingStat < SuperModel::Base
     @doubles = attributes[:doubles].present? ? attributes[:doubles] : 0
     @triples = attributes[:triples].present? ? attributes[:triples] : 0
 
-    #assign_player(@player_id)
   end
 
   def assign_player(player)
-    #p = Player.new
-    #p.player_id = player_id
+
     @player = player
 
     player.add_batting_stat(self)

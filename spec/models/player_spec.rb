@@ -4,11 +4,6 @@ require 'factory_girl'
 
 describe Player do
 
-  it 'has a valid factory' do
-
-    #expect(build(:player)).to be_valid
-  end
-
   it 'has many batting_stats' do
     p = Player.new
     expect(p).to respond_to(:batting_stats)
@@ -27,10 +22,9 @@ describe Player do
   end
 
   it 'can calculate its batting average for a given year' do
-    #p = build(:player)
     p = Player.new
     stat = {year: 2007, hits: 30, at_bats: 200}
-        #hit / at-bats
+
     p.add_batting_stat(BattingStat.new(stat))
     correct_average = 30.to_f / 200.to_f
     expect(p.batting_average(2007)).to eq(correct_average)
@@ -87,9 +81,6 @@ describe Player do
   end
 
   it 'knows its slugging percentage for a given year if it was traded mid-season' do
-    # Slugging percentage =
-    # ((Hits – doubles – triples – home runs) + (2 * doubles) + (3 * triples) + (4 * home runs)) / at-bats
-
     p = Player.new
     stat1 = BattingStat.new({year: 2007, hits: 20, at_bats: 250, rbi: 25, doubles: 10, triples: 5, home_runs: 14})
     stat2 = BattingStat.new({year: 2007, hits: 30, at_bats: 209, rbi: 15, doubles: 4, triples: 2, home_runs: 9})
@@ -101,8 +92,6 @@ describe Player do
     expect(p.slugging_percentage(2007)).to eq(the_answer)
   end
 
-
-
   it 'does not divide by zero' do
     #pass in at_bats = 0
     #should return zero
@@ -112,7 +101,6 @@ describe Player do
     name = 'ariasal02'
     player_name = Player.get_player_name(name)
     expect(player_name).to eq('Alberto Arias')
-
   end
 
 
