@@ -1,8 +1,8 @@
 
-require_relative 'hitting_stats_reporter'
+require_relative 'lib/hitting_stats_reporter'
 require 'csv'
-require_relative 'batting_stat'
-require_relative 'player'
+require_relative 'lib/batting_stat'
+require_relative 'lib/player'
 
 reporter = HittingStatsReporter.new
 
