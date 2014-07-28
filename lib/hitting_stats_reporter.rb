@@ -62,6 +62,7 @@ class HittingStatsReporter
     team_stats.collect {|stat| stat.player}
   end
 
+
   def report_team_slugging(team_id, the_year)
     report = "Slugging Percentages for #{team_id} #{the_year}\n"
     team_players = get_team_players(team_id, the_year)
@@ -70,6 +71,35 @@ class HittingStatsReporter
     end
     puts report
     report
+  end
+
+  def report_triple_crown_winners(the_year)
+    al_winners = find_triple_crown_winner('AL', the_year)
+    puts "#{the_year} American League Triple Crown Winner: #{al_winners.inspect}"
+
+    nl_winners = find_triple_crown_winner('NL', the_year)
+
+    puts "#{the_year} National League Triple Crown Winner: #{nl_winners.inspect}"
+  end
+
+  def find_triple_crown_winner(league_id, the_year)
+    league_stats = get_league_stats(league_id, the_year)
+    league_players = league_stats.collect {|stat| stat.player}
+    league_players = league_players.uniq
+
+    eligible_players = filter_by_at_bats(league_players, 400, the_year)
+    return [] unless eligible_players.count > 0
+
+    top_batting_avg = sort_players_by_bat_avg(eligible_players, the_year).first.batting_average(the_year)
+    top_bat_avg_players = get_players_by_batting_average(eligible_players,top_batting_avg, the_year)
+
+    top_num_home_runs = sort_players_by_home_runs(eligible_players, the_year).first.num_home_runs(the_year)
+    top_home_run_players = get_players_by_home_runs(eligible_players, top_num_home_runs, the_year)
+
+    top_num_rbi = sort_players_by_rbi(eligible_players, the_year).first.num_rbi(the_year)
+    top_rbi_players = get_players_by_rbi(eligible_players, top_num_rbi, the_year)
+
+    winners = find_common_members(top_bat_avg_players, top_home_run_players, top_rbi_players)
   end
 
   def calc_most_improved_bat_avg
@@ -128,6 +158,10 @@ class HittingStatsReporter
 
   def get_players_by_home_runs(players, num_hrs, the_year)
     players.select{|p| p.num_home_runs(the_year) == num_hrs}
+  end
+
+  def get_players_by_batting_average(players, bat_avg, the_year)
+    players.select{|p| p.batting_average(the_year) == bat_avg}
   end
 
   def find_or_create_player(attrs)

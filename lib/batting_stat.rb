@@ -13,12 +13,12 @@ class BattingStat < SuperModel::Base
     @year = attributes[:year]
     @league = attributes[:league]
     @team_id = attributes[:team_id]
-    @at_bats = attributes[:at_bats]
-    @hits = attributes[:hits]
-    @home_runs = attributes[:home_runs]
-    @rbi = attributes[:rbi]
-    @doubles = attributes[:doubles]
-    @triples = attributes[:triples]
+    @at_bats = attributes[:at_bats].present? ? attributes[:at_bats] : 0
+    @hits = attributes[:hits].present? ? attributes[:hits] : 0
+    @home_runs = attributes[:home_runs].present? ? attributes[:home_runs] : 0
+    @rbi = attributes[:rbi].present? ? attributes[:rbi] : 0
+    @doubles = attributes[:doubles].present? ? attributes[:doubles] : 0
+    @triples = attributes[:triples].present? ? attributes[:triples] : 0
 
     #assign_player(@player_id)
   end

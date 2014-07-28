@@ -149,4 +149,22 @@ describe HittingStatsReporter do
     player = filtered_list.first
     expect(player.num_home_runs(year)).to eq(5)
   end
+
+  it 'should extract players with a specific batting average for a year' do
+    reporter = HittingStatsReporter.new
+    reporter.load_stats('Test-Batting.csv')
+    year = 2011
+    filtered_list = reporter.get_players_by_batting_average(reporter.players, 0.25, year)
+    expect(filtered_list.count).to eq(1)
+    player = filtered_list.first
+    expect(player.batting_average(year)).to eq(0.25)
+  end
+
+  it 'should report Triple Crown Winners' do
+    reporter = HittingStatsReporter.new
+    reporter.load_stats('Test-Batting.csv')
+
+    reporter.report_triple_crown_winners(2012)
+    expect(true).to be_falsey
+  end
 end
