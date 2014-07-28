@@ -62,7 +62,7 @@ class HittingStatsReporter
     if al_winners.count > 0
       al_winners.each {|p| report << "#{p.full_name} - Batting Average: #{p.batting_average(the_year).round(3)}, Home Runs: #{p.num_home_runs(the_year)}, RBI: #{p.num_rbi(the_year)}"}
     else
-      report << "No winner\n"
+      report << "(No winner)\n"
     end
 
     nl_winners = find_triple_crown_winner('NL', the_year)
@@ -72,7 +72,7 @@ class HittingStatsReporter
     if nl_winners.count > 0
       nl_winners.each {|p| report << "#{p.full_name} - Batting Average: #{p.batting_average(the_year).round(3)}, Home Runs: #{p.num_home_runs(the_year)}, RBI: #{p.num_rbi(the_year)}"}
     else
-      report << "No winner\n"
+      report << "(No winner)\n"
     end
     report
   end
