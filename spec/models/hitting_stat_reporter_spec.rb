@@ -59,7 +59,6 @@ describe HittingStatsReporter do
     reporter.load_stats('Test-Batting.csv')
 
     report = reporter.report_team_slugging('PIT', 2012)
-    puts report
     expect(report.index('Pedro Alvarez: 0.467')).not_to be_nil
   end
 
@@ -86,7 +85,7 @@ describe HittingStatsReporter do
     reporter.load_stats('Test-Batting.csv')
 
     #TODO: check / fix -- getting errors for 2012 -- bad data?
-    filtered_list = reporter.filter_by_at_bats(reporter.players, 400, 2011)
+    filtered_list = reporter.filter_by_at_bats(reporter.players, HittingStatsReporter::TRIPLE_CROWN_AB_THRESHOLD, 2011)
     sorted_list = reporter.sort_players_by_bat_avg(filtered_list, 2011)
     expect(sorted_list.first.player_id).to eq('avilaal01')
   end
@@ -96,7 +95,7 @@ describe HittingStatsReporter do
     reporter.load_stats('Test-Batting.csv')
 
     #TODO: check / fix -- getting errors for 2012 -- bad data?
-    filtered_list = reporter.filter_by_at_bats(reporter.players, 400, 2011)
+    filtered_list = reporter.filter_by_at_bats(reporter.players, HittingStatsReporter::TRIPLE_CROWN_AB_THRESHOLD, 2011)
     sorted_list = reporter.sort_players_by_home_runs(filtered_list, 2011)
     expect(sorted_list.first.player_id).to eq('arencjp01')
   end
@@ -105,8 +104,7 @@ describe HittingStatsReporter do
     reporter = HittingStatsReporter.new
     reporter.load_stats('Test-Batting.csv')
 
-    #TODO: check / fix -- getting errors for 2012 -- bad data?
-    filtered_list = reporter.filter_by_at_bats(reporter.players, 400, 2011)
+    filtered_list = reporter.filter_by_at_bats(reporter.players, HittingStatsReporter::TRIPLE_CROWN_AB_THRESHOLD, 2011)
     sorted_list = reporter.sort_players_by_rbi(filtered_list, 2011)
     expect(sorted_list.first.player_id).to eq('avilaal01')
   end
@@ -161,8 +159,7 @@ describe HittingStatsReporter do
     reporter.load_stats('Batting-07-12.csv')
 
     output = reporter.report_triple_crown_winners(2012)
-    puts output
-    expect(true).to be_falsey
+    expect(output.index('Miguel Cabrera')).to_not be_nil
   end
 
   it 'should report the player(s) with the most improved batting average' do
@@ -170,7 +167,6 @@ describe HittingStatsReporter do
     reporter.load_stats('Test-Batting.csv')
 
     output = reporter.report_most_improved_bat_avg(2009, 2010)
-    puts output
     expect(output.index('Rod Barajas')).to_not be_nil
   end
 end

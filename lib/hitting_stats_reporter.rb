@@ -2,6 +2,8 @@ class HittingStatsReporter
 
   attr_reader :stats, :players
 
+  MOST_IMPROVED_AB_THRESHOLD = 200
+  TRIPLE_CROWN_AB_THRESHOLD = 400
   def initialize
     @players = []
     @stats = []
@@ -80,7 +82,7 @@ class HittingStatsReporter
     league_players = league_stats.collect {|stat| stat.player}
     league_players = league_players.uniq
 
-    eligible_players = filter_by_at_bats(league_players, 400, the_year)
+    eligible_players = filter_by_at_bats(league_players, TRIPLE_CROWN_AB_THRESHOLD, the_year)
     return [] unless eligible_players.count > 0
 
     top_batting_avg = sort_players_by_bat_avg(eligible_players, the_year).first.batting_average(the_year)
@@ -97,9 +99,9 @@ class HittingStatsReporter
 
   def report_most_improved_bat_avg(year1, year2)
     report = "***** Most Improved Batting Average from #{year1} to #{year2} *****\n\n"
-    players_2009 = filter_by_at_bats(@players, 200, year1)
+    players_2009 = filter_by_at_bats(@players, MOST_IMPROVED_AB_THRESHOLD, year1)
 
-    players_2010 = filter_by_at_bats(@players, 200, year2)
+    players_2010 = filter_by_at_bats(@players, MOST_IMPROVED_AB_THRESHOLD, year2)
 
     players_in_both_lists = players_2010 & players_2009
 
