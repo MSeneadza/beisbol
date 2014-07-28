@@ -8,17 +8,9 @@ class HittingStatsReporter
   end
 
   def load_stats(csv_file)
-    #csv_file = 'Batting-07-12.csv'
-    # quote_chars = %w(" | ~ ^ & *)
-    # begin
-    #   @report = CSV.read(csv_file, headers: :first_row, quote_char: quote_chars.shift)
-    # rescue CSV::MalformedCSVError => e
-    #   #reject(io.lineno, the_line, e.to_s)
-    # end
 
     begin
       CSV.foreach("./data/#{csv_file}", headers: :first_row, header_converters: :symbol, converters: :numeric) do |row|
-        #puts row
         attrs = Hash.new
         attrs[:player_id] = row[0]
         attrs[:year] = row[1]
@@ -37,22 +29,9 @@ class HittingStatsReporter
         @stats << new_stat
       end
     rescue CSV::MalformedCSVError => e
-      puts "Error while reading file: #{csv_file}: #{e}"
+      puts "Error while reading file: #{csv_file}: #{e} -- continuing..."
     end
 
-
-    puts "number of rows read = #{@stats.count}"
-    puts "number of Players created = #{@players.count}"
-    puts @stats.last.inspect
-    #<Player:0x007fe4e6d928f8 @new_record=false, @attributes={"playerID"=>"zumayjo01", "yearID"=>"2008", "league"=>"AL", "teamID"=>"DET", "G"=>"21", "AB"=>"0", "R"=>"0", "H"=>"0", "2B"=>"0", "3B"=>"0", "HR"=>"0", "RBI"=>"0", "SB"=>"0", "CS"=>"0", "id"=>"12e6894286de29b09059920703"}, @changed_attributes={}>
-
-    #@players.each {|p| puts p.inspect}
-
-    #calc_most_improved_bat_avg
-
-
-    #oak_players = Player.find_all_by_teamID('OAK')
-    #oak_players.each {|op| puts op.playerID}
   end
 
   def get_team_players(team_id, the_year)
@@ -64,22 +43,36 @@ class HittingStatsReporter
 
 
   def report_team_slugging(team_id, the_year)
-    report = "Slugging Percentages for #{team_id} #{the_year}\n"
+    report = "***** Slugging Percentages for #{team_id} #{the_year} *****\n\n"
     team_players = get_team_players(team_id, the_year)
+    team_players = team_players.sort {|a, b| a.full_name <=> b.full_name}
     team_players.each do |player|
-      report << "#{player.player_id}: #{player.slugging_percentage(the_year).round(3)} \n"
+      report << "#{player.full_name}: #{player.slugging_percentage(the_year).round(3)} \n"
     end
-    puts report
     report
   end
 
   def report_triple_crown_winners(the_year)
+    report = "***** #{the_year} Triple Crown Winners *****\n\n"
     al_winners = find_triple_crown_winner('AL', the_year)
-    puts "#{the_year} American League Triple Crown Winner: #{al_winners.inspect}"
+    report << "#{the_year} American League Triple Crown Winner(s):\n"
+
+    if al_winners.count > 0
+      al_winners.each {|p| report << "#{p.full_name} - Batting Average: #{p.batting_average(the_year).round(3)}, Home Runs: #{p.num_home_runs(the_year)}, RBI: #{p.num_rbi(the_year)}"}
+    else
+      report << "No winner\n"
+    end
 
     nl_winners = find_triple_crown_winner('NL', the_year)
 
-    puts "#{the_year} National League Triple Crown Winner: #{nl_winners.inspect}"
+    report << "\n\n#{the_year} National League Triple Crown Winner:\n"
+
+    if nl_winners.count > 0
+      nl_winners.each {|p| report << "#{p.full_name} - Batting Average: #{p.batting_average(the_year).round(3)}, Home Runs: #{p.num_home_runs(the_year)}, RBI: #{p.num_rbi(the_year)}"}
+    else
+      report << "No winner\n"
+    end
+    report
   end
 
   def find_triple_crown_winner(league_id, the_year)
@@ -99,32 +92,26 @@ class HittingStatsReporter
     top_num_rbi = sort_players_by_rbi(eligible_players, the_year).first.num_rbi(the_year)
     top_rbi_players = get_players_by_rbi(eligible_players, top_num_rbi, the_year)
 
-    winners = find_common_members(top_bat_avg_players, top_home_run_players, top_rbi_players)
+    find_common_members(top_bat_avg_players, top_home_run_players, top_rbi_players)
   end
 
-  def calc_most_improved_bat_avg
-    players_2009 = filter_by_at_bats(@players, 200, 2009)
-    #puts "number of players with more than 200 ABs in 2009 #{players_2009.count}"
+  def report_most_improved_bat_avg(year1, year2)
+    report = "***** Most Improved Batting Average from #{year1} to #{year2} *****\n\n"
+    players_2009 = filter_by_at_bats(@players, 200, year1)
 
-    players_2010 = filter_by_at_bats(@players, 200, 2010)
-    #puts "number of players with more than 200 ABs in 2010 #{players_2010.count}"
+    players_2010 = filter_by_at_bats(@players, 200, year2)
 
-    # players_2009.each { |p| puts p.player_id }
-    # puts "********"
-    # players_2010.each { |p| puts p.player_id }
-    #
-    # puts "********"
     players_in_both_lists = players_2010 & players_2009
 
     sorted = players_in_both_lists.sort { |a, b| (b.batting_average(2010) - b.batting_average(2009)) <=> (a.batting_average(2010) - a.batting_average(2009)) }
-    sorted.each { |p| puts "#{p.player_id} #{p.batting_average(2010) - p.batting_average(2009)}" }
     winning_difference = sorted.first.batting_average(2010) - sorted.first.batting_average(2009)
-    puts "***** Winning Diff = #{ winning_difference}"
+    report << "Winning Batting Average Increase is: #{ winning_difference}\n"
 
     winners = sorted.select { |p| p.batting_average(2010) - p.batting_average(2009) == winning_difference }
 
-    puts "WINNER(S): "
-    winners.each { |p| puts p.player_id }
+    report << "WINNER(S): \n"
+    winners.each { |p| report << p.full_name }
+    report
   end
 
   def get_league_stats(league_id, the_year)

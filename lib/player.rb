@@ -60,6 +60,10 @@ class Player
     extract_stat(stats, :rbi)
   end
 
+  def full_name
+    Player.get_player_name(player_id)
+  end
+
   def self.get_player_name(player_id)
 
     player = names_hash[player_id]
