@@ -16,3 +16,7 @@ puts reporter.report_team_slugging('OAK', 2007)
 puts "\n\n\n"
 puts reporter.report_triple_crown_winners(2012)
 
+#reporter = PitchingStatsReporter.new
+#reporter.load_stats('Pitching-Data.csv')
+#calls to create pitching report
+
