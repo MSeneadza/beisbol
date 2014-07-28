@@ -18,10 +18,9 @@ When the application is run, use the provided data and calculate the following r
 * cd into the root of the directory from the previous step
 * create and switch to a gemset if so desired
 * run 'bundle' to install the required gems.
-* At the command prompt type 'ruby baseball_report.rb' to generate the Hitting Stats Report, which will be output to your screen
 
 ### Running The Report ###
-* cd into the directory whrere the code was copied.
+* cd into the directory where the code was copied.
 * At the command prompt type 'ruby baseball_report.rb' to generate the Hitting Stats Report, which will be output to your screen
 
 ### Running Tests ###
